@@ -17,7 +17,7 @@ function galleryGradient(hex: string): string {
 }
 
 function hasRealImage(src: string): boolean {
-  return src.startsWith("/images/");
+  return src.startsWith("/images/") || src.startsWith("/fit-by-body/") || src.startsWith("https://");
 }
 
 export function ImageGallery({ images, productName, colorName, colorHex = "#8a7d6b" }: ImageGalleryProps) {
