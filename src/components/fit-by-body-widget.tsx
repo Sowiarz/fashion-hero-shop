@@ -9,9 +9,10 @@ import { silhouettes, type BodyType, type FitProduct } from "@/data/fitbybody";
 interface FitByBodyWidgetProps {
   product: FitProduct;
   locked?: boolean;
+  onInteract?: () => void;
 }
 
-export function FitByBodyWidget({ product, locked = false }: FitByBodyWidgetProps) {
+export function FitByBodyWidget({ product, locked = false, onInteract }: FitByBodyWidgetProps) {
   const [selected, setSelected] = useState<BodyType>("average");
 
   const activeSilhouette = silhouettes.find((s) => s.id === selected)!;
@@ -20,6 +21,7 @@ export function FitByBodyWidget({ product, locked = false }: FitByBodyWidgetProp
   function handleSelect(id: BodyType) {
     if (locked) return;
     setSelected(id);
+    onInteract?.();
     console.log("[FitByBody] sylwetka zmieniona:", id, "produkt:", product.id);
   }
 

@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useParams } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import Link from "next/link";
 import { ImageGallery } from "@/components/image-gallery";
 import { FitByBodyWidget } from "@/components/fit-by-body-widget";
@@ -36,7 +37,9 @@ export default function ProduktPage() {
   const product = fitProducts.find((p) => p.id === id) ?? fitProducts[0];
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [widgetInteracted, setWidgetInteracted] = useState(false);
   const { addItem, openCart } = useCart();
+  const posthog = usePostHog();
 
   // Build a Product-compatible mock so we can reuse the real cart
   const cartProduct = useMemo<Product>(() => ({
@@ -69,6 +72,7 @@ export default function ProduktPage() {
     const numericSize = sizeIndex >= 0 ? sizeIndex + 1 : 1;
     addItem(cartProduct, cartColor, numericSize);
     openCart();
+    posthog?.capture("add_to_cart_clicked", { widget_interacted: widgetInteracted });
   }
 
   return (
@@ -185,7 +189,7 @@ export default function ProduktPage() {
           </div>
 
           {/* FitByBody widget */}
-          <FitByBodyWidget product={product} locked={false} />
+          <FitByBodyWidget product={product} locked={false} onInteract={() => setWidgetInteracted(true)} />
         </div>
       </div>
 
