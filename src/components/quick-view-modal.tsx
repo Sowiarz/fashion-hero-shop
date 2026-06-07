@@ -47,7 +47,7 @@ export function QuickViewModal({ product, onClose }: QuickViewModalProps) {
   }
 
   const imageSrc = selectedColor.image;
-  const showImage = imageSrc.startsWith("/images/");
+  const showImage = imageSrc.startsWith("/images/") || imageSrc.startsWith("/fit-by-body/") || imageSrc.startsWith("https://");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
