@@ -10,18 +10,21 @@ interface FitByBodyWidgetProps {
   product: FitProduct;
   locked?: boolean;
   onInteract?: () => void;
+  onPreview?: (imageUrl: string, label: string) => void;
 }
 
-export function FitByBodyWidget({ product, locked = false, onInteract }: FitByBodyWidgetProps) {
+export function FitByBodyWidget({ product, locked = false, onInteract, onPreview }: FitByBodyWidgetProps) {
   const [selected, setSelected] = useState<BodyType>("average");
 
   const activeSilhouette = silhouettes.find((s) => s.id === selected)!;
-  const modelImageUrl = activeSilhouette.images[product.id] ?? activeSilhouette.images["sukienka"];
 
   function handleSelect(id: BodyType) {
     if (locked) return;
     setSelected(id);
     onInteract?.();
+    const silhouette = silhouettes.find((s) => s.id === id)!;
+    const imageUrl = silhouette.images[product.id] ?? silhouette.images["sukienka"];
+    onPreview?.(imageUrl, `Wizualizacja AI — sylwetka ${silhouette.label}`);
     console.log("[FitByBody] sylwetka zmieniona:", id, "produkt:", product.id);
   }
 
@@ -91,26 +94,11 @@ export function FitByBodyWidget({ product, locked = false, onInteract }: FitByBo
         ))}
       </div>
 
-      {/* Big model preview for selected silhouette */}
-      <div className="relative rounded-xl overflow-hidden bg-muted aspect-[3/4] w-full">
-        <Image
-          key={selected}
-          src={modelImageUrl}
-          alt={`Wizualizacja AI — ${activeSilhouette.label} — ${product.name}`}
-          fill
-          className="object-cover object-top"
-          sizes="(max-width: 768px) 100vw, 50vw"
-          priority
-        />
-        {/* Overlay label */}
-        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
-          <p className="text-white text-xs leading-snug">{activeSilhouette.note}</p>
-          <p className="text-white/60 text-[10px] mt-0.5 flex items-center gap-1">
-            <Sparkles className="size-2.5" />
-            Wizualizacja AI — sylwetka {activeSilhouette.label}
-          </p>
-        </div>
-      </div>
+      {/* Note for selected silhouette */}
+      <p className="text-xs text-muted-foreground leading-snug flex items-start gap-1.5">
+        <Sparkles className="size-3 text-[oklch(0.4_0.2_300)] mt-0.5 shrink-0" />
+        {activeSilhouette.note}
+      </p>
 
       {/* Size table */}
       <div>

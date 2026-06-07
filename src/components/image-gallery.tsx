@@ -9,6 +9,9 @@ interface ImageGalleryProps {
   productName: string;
   colorName?: string;
   colorHex?: string;
+  overrideImage?: string | null;
+  overrideLabel?: string;
+  onClearOverride?: () => void;
 }
 
 /* Generate gradient placeholders that look intentional */
@@ -20,13 +23,13 @@ function hasRealImage(src: string): boolean {
   return src.startsWith("/images/") || src.startsWith("/fit-by-body/") || src.startsWith("https://");
 }
 
-export function ImageGallery({ images, productName, colorName, colorHex = "#8a7d6b" }: ImageGalleryProps) {
+export function ImageGallery({ images, productName, colorName, colorHex = "#8a7d6b", overrideImage, overrideLabel, onClearOverride }: ImageGalleryProps) {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [isZooming, setIsZooming] = useState(false);
   const [zoomPos, setZoomPos] = useState({ x: 50, y: 50 });
   const mainRef = useRef<HTMLDivElement>(null);
 
-  const currentImage = images[selectedIndex] || images[0];
+  const currentImage = overrideImage || images[selectedIndex] || images[0];
 
   const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!mainRef.current) return;
@@ -89,6 +92,26 @@ export function ImageGallery({ images, productName, colorName, colorHex = "#8a7d
               />
             </div>
           </div>
+        )}
+        {overrideImage && (
+          <>
+            {onClearOverride && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onClearOverride();
+                }}
+                className="absolute top-3 right-3 z-10 text-[11px] font-medium bg-white/90 hover:bg-white text-charcoal px-3 py-1.5 rounded-full shadow-sm transition-colors cursor-pointer"
+              >
+                ← Wróć do zdjęcia produktu
+              </button>
+            )}
+            {overrideLabel && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent px-4 py-3">
+                <p className="text-white text-xs flex items-center gap-1.5">{overrideLabel}</p>
+              </div>
+            )}
+          </>
         )}
       </div>
 

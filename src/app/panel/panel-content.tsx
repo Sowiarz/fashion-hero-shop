@@ -172,6 +172,21 @@ export default function PanelContent() {
           </div>
 
           <div className="p-6 space-y-6">
+            {/* What it is */}
+            <div className="rounded-xl bg-[oklch(0.97_0.03_300)] border border-[oklch(0.85_0.08_300)] px-4 py-4 space-y-2">
+              <p className="text-sm font-semibold text-foreground">Czym jest FitByBody?</p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                To widget osadzony na stronie produktu, który pokazuje kupującemu wizualizację AI —
+                jak dany model ubrania będzie leżał na sylwetce zbliżonej do jego własnej (szczupła,
+                średnia, plus-size). Na podstawie wymiarów, które Ty dodajesz raz dla każdego
+                produktu, widget poleca też konkretny rozmiar i pokazuje pełną tabelę pomiarów.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Efekt: kupujący wybiera rozmiar z większą pewnością, zamiast zgadywać — co przekłada
+                się na mniej zwrotów „zły rozmiar" i wyższą konwersję w Twoim sklepie.
+              </p>
+            </div>
+
             {/* Benefits */}
             <ul className="space-y-2">
               {[

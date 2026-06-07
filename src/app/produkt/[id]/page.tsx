@@ -38,6 +38,7 @@ export default function ProduktPage() {
 
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [widgetInteracted, setWidgetInteracted] = useState(false);
+  const [previewImage, setPreviewImage] = useState<{ url: string; label: string } | null>(null);
   const { addItem, openCart } = useCart();
   const posthog = usePostHog();
 
@@ -86,6 +87,9 @@ export default function ProduktPage() {
             productName={product.name}
             colorName="Terakota"
             colorHex="#a0522d"
+            overrideImage={previewImage?.url}
+            overrideLabel={previewImage?.label}
+            onClearOverride={() => setPreviewImage(null)}
           />
           <div className="border-t border-border pt-2">
             {[
@@ -189,7 +193,12 @@ export default function ProduktPage() {
           </div>
 
           {/* FitByBody widget */}
-          <FitByBodyWidget product={product} locked={false} onInteract={() => setWidgetInteracted(true)} />
+          <FitByBodyWidget
+            product={product}
+            locked={false}
+            onInteract={() => setWidgetInteracted(true)}
+            onPreview={(url, label) => setPreviewImage({ url, label })}
+          />
         </div>
       </div>
 
